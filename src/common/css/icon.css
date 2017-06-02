@@ -1,0 +1,227 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../fonts/icomoon.eot?n81k10');
+  src:  url('../fonts/icomoon.eot?n81k10#iefix') format('embedded-opentype'),
+  url('../fonts/icomoon.ttf?n81k10') format('truetype'),
+  url('../fonts/icomoon.woff?n81k10') format('woff'),
+  url('../fonts/icomoon.svg?n81k10#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-comfirm-diamond:before {
+  content: "\e943";
+}
+.icon-confirm-vip:before {
+  content: "\e947";
+}
+.icon-wallet-ticket:before {
+  content: "\e949";
+}
+.icon-sea-vip:before {
+  content: "\e964";
+}
+.icon-seller-coupon:before {
+  content: "\e993";
+}
+.icon-fish:before {
+  content: "\e920";
+}
+.icon-mywallet:before {
+  content: "\e922";
+}
+.icon-diamond2:before {
+  content: "\e923";
+}
+.icon-dollar:before {
+  content: "\e924";
+}
+.icon-coin-solid:before {
+  content: "\e921";
+}
+.icon-credit:before {
+  content: "\e925";
+}
+.icon-coin:before {
+  content: "\e926";
+}
+.icon-money:before {
+  content: "\e927";
+}
+.icon-back:before {
+  content: "\e91f";
+}
+.icon-confirm:before {
+  content: "\e91e";
+}
+.icon-close:before {
+  content: "\e900";
+}
+.icon-down-arrow:before {
+  content: "\e901";
+}
+.icon-edit:before {
+  content: "\e902";
+}
+.icon-edit-poster:before {
+  content: "\e903";
+}
+.icon-egg:before {
+  content: "\e904";
+}
+.icon-foot:before {
+  content: "\e905";
+}
+.icon-hook:before {
+  content: "\e906";
+}
+.icon-key:before {
+  content: "\e907";
+}
+.icon-like:before {
+  content: "\e908";
+}
+.icon-lock:before {
+  content: "\e909";
+}
+.icon-moon:before {
+  content: "\e90a";
+}
+.icon-msg:before {
+  content: "\e90b";
+}
+.icon-read:before {
+  content: "\e90c";
+}
+.icon-right:before {
+  content: "\e90d";
+}
+.icon-right-arrow:before {
+  content: "\e90e";
+}
+.icon-salegoods-minus:before {
+  content: "\e90f";
+}
+.icon-salegoods-plus:before {
+  content: "\e910";
+}
+.icon-search:before {
+  content: "\e911";
+}
+.icon-special:before {
+  content: "\e912";
+}
+.icon-star-empty:before {
+  content: "\e913";
+}
+.icon-star-half:before {
+  content: "\e914";
+}
+.icon-star-solid:before {
+  content: "\e915";
+}
+.icon-sun:before {
+  content: "\e916";
+}
+.icon-ticket:before {
+  content: "\e917";
+}
+.icon-tobepay:before {
+  content: "\e918";
+}
+.icon-up-arrow:before {
+  content: "\e919";
+}
+.icon-used:before {
+  content: "\e91a";
+}
+.icon-usedtobe:before {
+  content: "\e91b";
+}
+.icon-user:before {
+  content: "\e91c";
+}
+.icon-write-edit:before {
+  content: "\e91d";
+}
+.icon-king:before {
+  content: "\e928";
+}
+.icon-hot:before {
+  content: "\e929";
+}
+.icon-gift:before {
+  content: "\e92e";
+}
+.icon-usual:before {
+  content: "\e931";
+}
+.icon-back2:before {
+  content: "\e932";
+}
+.icon-seaVip:before {
+  content: "\e933";
+}
+.icon-food:before {
+  content: "\e934";
+}
+.icon-confirm-ticket:before {
+  content: "\e935";
+}
+.icon-confirm-sea:before {
+  content: "\e93a";
+}
+.icon-confirm-coupon:before {
+  content: "\e92c";
+}
+.icon-diamond:before {
+  content: "\e92d";
+}
+.icon-question:before {
+  content: "\e92f";
+}
+.icon-light:before {
+  content: "\e930";
+}
+.icon-sea:before {
+  content: "\e93b";
+}
+.icon-vip:before {
+  content: "\e93c";
+}
+.icon-wallet-coupon:before {
+  content: "\e93d";
+}
+.icon-zunxiang:before {
+  content: "\e93e";
+}
+.icon-bus:before {
+  content: "\e936";
+}
+.icon-call:before {
+  content: "\e937";
+}
+.icon-location:before {
+  content: "\e938";
+}
+.icon-other:before {
+  content: "\e939";
+}
+
+
+

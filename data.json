@@ -1,0 +1,57 @@
+{
+  "movie": [
+    {
+      "title": "金刚：骷髅岛",
+      "type": "3D,iMax",
+      "wantsee": "2.8万",
+      "tip": "抖森勇闯骷髅岛，最强金刚归来",
+      "actor": "汤姆·希德勒斯顿/布丽·拉尔森",
+      "msg": "新街口观影9.9",
+      "imgUrl": "./static/images/movie1.jpg",
+      "coupon": true,
+      "hot": false
+    },
+    {
+      "title": "美女与野兽",
+      "type": "3D,iMax",
+      "wantsee": "7.6万",
+      "tip": "童话永经典，公主美流传",
+      "actor": "爱玛·沃森/丹·史蒂文斯",
+      "msg": "《美女与野兽》井柏然表白女神...",
+      "imgUrl": "./static/images/movie2.jpg",
+      "coupon" : false,
+      "hot": true
+    },
+    {
+      "title": "欢乐喜剧人",
+      "type": "2D",
+      "wantsee": "7.2万",
+      "tip": "郭老师人间蒸发，小岳岳奋力营救",
+      "actor": "郭德纲/岳云鹏/罗温·艾金森",
+      "msg": "",
+      "imgUrl": "./static/images/movie3.jpg",
+      "coupon" : false,
+      "hot": false
+    },
+    {
+      "title": "领袖1935",
+      "type": "2D",
+      "wantsee": "211",
+      "tip": "八十周年献军礼，再现卓绝英雄史",
+      "actor": "王晖/刘劲/吴京安/王伍福",
+      "msg": "",
+      "imgUrl": "./static/images/movie4.jpg",
+      "coupon" : false,
+      "hot": false
+    }
+  ],
+  "find": {
+
+  },
+  "mall": {
+
+  },
+  "menu": {
+
+  }
+}
