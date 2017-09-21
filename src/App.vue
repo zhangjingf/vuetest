@@ -22,7 +22,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import myHeader from '@/components/header/header'
+  import myHeader from '@/views/header'
   import Swiper from '../static/js/swiper.min.js'
   export default {
     name: 'app',
@@ -101,6 +101,5 @@ footer>div {
   font-size: 1rem;
   line-height: 4rem;
   text-align: center;
-
 }
 </style>

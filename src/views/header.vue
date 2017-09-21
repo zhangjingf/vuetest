@@ -15,11 +15,9 @@
     }
   }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .header {
-  display: flex;
+  position: absolute;
   align-items: center;
   padding: 0 1rem;
   font-size: 1.2rem;
