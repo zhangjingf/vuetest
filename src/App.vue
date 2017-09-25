@@ -22,7 +22,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import myHeader from '@/components/header/header'
+  import myHeader from '@/views/header'
   import Swiper from '../static/js/swiper.min.js'
   export default {
     name: 'app',
@@ -59,7 +59,6 @@
 </script>
 
 <style>
-@import './common/css/icon.css';
 @import '../static/css/animate.min.css';
 @import '../static/css/swiper.css';
 html {
