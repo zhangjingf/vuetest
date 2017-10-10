@@ -1,27 +1,49 @@
 <template>
-  <div class="hot-film">
-    <div v-for="item in movie">
-      <div class="img"><img :src="item.imgUrl" alt=""></div>
-      <div class="filmInfo">
-        <div class="title">{{item.title}}<span>{{item.type}}</span></div>
-        <div class="tip">{{item.tip}}</div>
-        <div class="actor">{{item.actor}}</div>
+  <div class="m-film">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="../../static/images/banner.jpg" alt=""></div>
+          <div class="swiper-slide"><img src="../../static/images/banner.jpg" alt=""></div>
+          <div class="swiper-slide"><img src="../../static/images/banner.jpg" alt=""></div>
+        </div>
+        <div class="swiper-pagination"></div>
       </div>
-      <div class="wantsee">
-        <div>{{item.wantsee}}想看</div>
-        <div>预售</div>
+    <div class="hot-film">
+      <div v-for="item in movie">
+        <div class="img"><img :src="item.imgUrl" alt=""></div>
+        <div class="filmInfo">
+          <div class="title">{{item.title}}
+            <span>{{item.type}}</span>
+          </div>
+          <div class="tip">{{item.tip}}</div>
+          <div class="actor">{{item.actor}}</div>
+        </div>
+        <div class="wantsee">
+          <div>{{item.wantsee}}想看</div>
+          <div>预售</div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import Swiper from '../../static/js/swiper.min.js'
 const ERR_OK = 0
 export default {
   props: {
     seller: {
       type: Object
     }
+  },
+  mounted() {
+    let mySwiper = new Swiper('.swiper-container', {
+        loop: true,
+        autoplay: 5000,
+        pagination: '.swiper-pagination',
+        paginationClickable: true
+      })
+      mySwiper.startAutoplay()
   },
   data () {
     return {

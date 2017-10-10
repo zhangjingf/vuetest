@@ -1,5 +1,5 @@
 <template>
-  <div>商城</div>
+  <div class="m-mall"></div>
 </template>
 
 <script>

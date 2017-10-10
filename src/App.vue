@@ -1,15 +1,7 @@
 <template>
   <div id="app">
-    <myHeader></myHeader>
+    <my-header/>
     <div class="pbd">
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide"><img src="../static/images/banner.jpg" alt=""></div>
-          <div class="swiper-slide"><img src="../static/images/banner.jpg" alt=""></div>
-          <div class="swiper-slide"><img src="../static/images/banner.jpg" alt=""></div>
-        </div>
-        <div class="swiper-pagination"></div>
-      </div>
       <router-view></router-view>
     </div>
     <footer>
@@ -23,7 +15,6 @@
 
 <script type="text/ecmascript-6">
   import myHeader from '@/views/header'
-  import Swiper from '../static/js/swiper.min.js'
   export default {
     name: 'app',
     components: { myHeader },
@@ -41,13 +32,6 @@
 
     },
     mounted () {
-      let mySwiper = new Swiper('.swiper-container', {
-        loop: true,
-        autoplay: 5000,
-        pagination: '.swiper-pagination',
-        paginationClickable: true
-      })
-      mySwiper.startAutoplay()
     },
     created () {
 
@@ -58,8 +42,8 @@
   }
 </script>
 
-<style>
-@import './common/css/icon.css';
+<style lang="scss">
+@import './common/style/icon.css';
 @import '../static/css/animate.min.css';
 @import '../static/css/swiper.css';
 html {

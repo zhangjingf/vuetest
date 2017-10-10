@@ -11,7 +11,7 @@
 <script>
 export default {
   methods: {
-    back(event) {
+    back (event) {
       console.log(this)
     }
   }
@@ -20,6 +20,8 @@ export default {
 <style scoped>
 .header {
   position: absolute;
+  display: flex;
+  width: 100%;
   align-items: center;
   padding: 0 1rem;
   font-size: 1.2rem;

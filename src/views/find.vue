@@ -1,5 +1,5 @@
 <template>
-  <div>发现</div>
+  <div class="m-find"></div>
 </template>
 
 <script>
