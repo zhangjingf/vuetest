@@ -5,11 +5,17 @@ import film from '@/views/film'
 import find from '@/views/find'
 import mall from '@/views/mall'
 import menu from '@/views/menu'
+import filmDetail from '@/views/filmDetail'
 Vue.use(Router)
 Vue.use(Source)
 
 const routes = [
-    { path: '/film', component: film, name: '电影' },
+    { path: '/film', component: film, name: '电影', children: [
+        {
+            path: '/filmDetail',
+            component: filmDetail
+        }
+    ] },
     { path: '/find', component: find, name: '发现' },
     { path: '/mall', component: mall, name: '商城' },
     { path: '/menu', component: menu, name: '我的' }

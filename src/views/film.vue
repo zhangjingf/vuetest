@@ -1,13 +1,14 @@
 <template>
-  <div class="m-film">
+<transition name="fade">
+  <div class="m-film" ref="film">
     <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide"><img src="../../static/images/banner.jpg" alt=""></div>
-          <div class="swiper-slide"><img src="../../static/images/banner.jpg" alt=""></div>
-          <div class="swiper-slide"><img src="../../static/images/banner.jpg" alt=""></div>
-        </div>
-        <div class="swiper-pagination"></div>
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="../../static/images/banner.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="../../static/images/banner.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="../../static/images/banner.jpg" alt=""></div>
       </div>
+      <div class="swiper-pagination"></div>
+    </div>
     <div class="hot-film">
       <div v-for="item in movie">
         <div class="img"><img :src="item.imgUrl" alt=""></div>
@@ -25,6 +26,7 @@
       </div>
     </div>
   </div>
+</transition>
 </template>
 
 <script type="text/ecmascript-6">
@@ -36,19 +38,20 @@ export default {
       type: Object
     }
   },
-  mounted() {
-    let mySwiper = new Swiper('.swiper-container', {
-        loop: true,
-        autoplay: 5000,
-        pagination: '.swiper-pagination',
-        paginationClickable: true
-      })
-      mySwiper.startAutoplay()
-  },
   data () {
     return {
-      movie: []
+      movie: [],
     }
+  },
+  mounted() {
+    let mySwiper = new Swiper('.swiper-container', {
+      loop: true,
+      autoplay: 5000,
+      pagination: '.swiper-pagination',
+      paginationClickable: true
+    })
+  
+    mySwiper.startAutoplay();
   },
   created () {
     this.$http.get('/api/movie').then((response) => {
@@ -57,11 +60,15 @@ export default {
         this.movie = response.data
       }
     })
+  },
+  beforeRouteEnter(to, from, next) {
+      next(vm => {
+        console.log(vm);
+      })
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .hot-film {
     padding-left: 1rem;
@@ -69,7 +76,7 @@ export default {
   }
 
   .hot-film>div{
-       padding: 1.5rem 1rem 0 0;
+       padding: 1.5rem 1rem 1rem 0;
        display: flex;
        border-top: 1px solid #f5f5f5;
   }

@@ -1,43 +1,54 @@
 <template>
   <div id="app">
-    <my-header/>
+    <my-header :path="this.path"/>
     <div class="pbd">
       <router-view></router-view>
     </div>
     <footer>
-      <div><router-link :to="{ path: 'film' }">电影</router-link></div>
-      <div><router-link to="/find">发现</router-link></div>
-      <div><router-link to="/mall">商城</router-link></div>
-      <div><router-link to="/menu">我的</router-link></div>
+      <div><router-link :to="{ path: 'film' }" replace>电影</router-link></div>
+      <div><router-link to="/find" replace>发现</router-link></div>
+      <div><router-link to="/mall" replace>商城</router-link></div>
+      <div><router-link to="/menu" replace>我的</router-link></div>
     </footer>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import myHeader from '@/views/header'
+  import myHeader from '@/components/header'
+  import URL from './lib/util/URL';
+  import BScroll from 'better-scroll'
   export default {
     name: 'app',
+    data() {
+      return {
+        path: null,
+        name: null,
+        scroll: null,
+        options: {
+          click: true,
+          bounce: true
+        }
+      }
+    },
     components: { myHeader },
     watch: {
       '$route' (to, from) {
-        document.querySelector('.title').innerHTML = to.name
+        this.path = to.path;
       }
     },
     methods: {
-      buttonClick () {
-        console.log(this)
-      }
+      
     },
     computed: {
 
     },
     mounted () {
+      const vm = this;
+      vm.path= URL.parse(window.location.href).hash;
+      vm.scorll = new BScroll('.pbd', vm.options);
     },
     created () {
-
-    },
-    ready () {
-
+      this.$router.push({path: '/film'});
     }
   }
 </script>
@@ -46,10 +57,7 @@
 @import './common/style/icon.css';
 @import '../static/css/animate.min.css';
 @import '../static/css/swiper.css';
-html {
-  height: 100%;
-}
-body {
+html,body {
   height: 100%;
 }
 img {
