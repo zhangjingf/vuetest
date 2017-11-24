@@ -1,5 +1,3 @@
-var reg = /[^\x00-\xff]/g;
-
-module.exports = function(str) {
-    return (str || "").replace(reg, "aa").length;
+export default function(str) {
+    return (str || "").replace(/[^\x00-\xff]/g, "aa").length;
 }

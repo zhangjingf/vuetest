@@ -3,7 +3,7 @@
  * 支持第一个参数传boolean类型，当传true时，支持深层合并
  * 例子：
  *
- * var merge = require("../json/merge");
+ * import merge from "../json/merge";
  * var opts = { url: "http://www.baidu.com" };
  * var defaultOpts = { url: "", method: "get" };
  * opts = merge(defaultOpts, opts);
@@ -15,36 +15,31 @@
  *
  */
 
-var getType = require("../util/getType");
-var each = require("../util/each");
+ import {isArray, isObject} from '../util/dataType'
+ 
+ export default function(...args) {
+    
+    let isDeep = false;
+    let result = {};
 
-module.exports = function() {
-
-    var result = [];
-    var args = [].slice.call(arguments);
-    result.push.apply(result, args);
-
-    var deep = false;
-
-    function mergeObj(r, obj){
-        each(obj, function(v, k){
-            if(deep && ((getType(r[k]) === "object" && getType(v) === "object") || (getType(r[k]) === "array" && getType(v) === "array"))){
-                mergeObj(r[k], v);
+    function merge(r, obj){
+        for(let k in obj){
+            let v1 = r[k], v2 = obj[k];
+            if(isDeep && ((isObject(v1) && isObject(v2)) || (isArray(v1) && isArray(v2)))){
+                merge(v1, v2);
             }else{
-                r[k] = v;
+                r[k] = v2;
             }
-        });
+        }
     }
 
-    var newObj = {};
-
-    each(result, function(item, index){
-         if(index == 0 && item === true){
-             deep = true;
-         }else if(getType(item) === "object"){
-             mergeObj(newObj, item);
-         }
+    args.forEach((item, index) => {
+        if(index === 0 && item === true){
+            isDeep = true;
+        }else if(isObject(item)){
+            merge(result, item);
+        }
     });
 
-    return newObj;
-}
+    return result;
+ }

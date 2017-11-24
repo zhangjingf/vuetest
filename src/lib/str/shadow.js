@@ -2,11 +2,11 @@
  * 为字符串加上掩码，前后保留两个可见字符，其它的都变成*
  * 例子：
  *
- * var shadow = require("../str/shadow");
+ * import shadow from "../str/shadow";
  * var str = shadow("hello world"); // he*******ld
  *
  */
-module.exports = function(match) {
+export default function(match) {
     if (match.length == 1) {
         match = "*";
     } else if (match.length < 5) {

@@ -28,6 +28,9 @@ export default {
     back () {
       this.$router.push({path: '/film'});
       console.log(this.$router);
+    },
+    next () {
+      console.log(111);
     }
   },
   watch: {

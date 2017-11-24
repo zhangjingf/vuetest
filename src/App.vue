@@ -14,20 +14,16 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import myHeader from '@/components/header'
+  import myHeader from '@/components/header';
   import URL from './lib/util/URL';
-  import BScroll from 'better-scroll'
+
   export default {
     name: 'app',
     data() {
       return {
         path: null,
         name: null,
-        scroll: null,
-        options: {
-          click: true,
-          bounce: true
-        }
+        index: 0
       }
     },
     components: { myHeader },
@@ -37,15 +33,17 @@
       }
     },
     methods: {
-      
+  
     },
     computed: {
-
+      value: function() {
+        return this.index++;
+      }
     },
     mounted () {
       const vm = this;
       vm.path= URL.parse(window.location.href).hash;
-      vm.scorll = new BScroll('.pbd', vm.options);
+      //console.log(this.$el);
     },
     created () {
       this.$router.push({path: '/film'});

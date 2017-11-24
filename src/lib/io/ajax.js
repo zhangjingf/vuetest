@@ -6,106 +6,160 @@
  * var ajax = require("../io/ajax");
  * ajax({
  *     url: "/api/api.jsp",
- *     timeout: 30000, // 缺少值3秒,
- *     data: { id: 1 }, // 仅method=post时生效，如果传入json对象会被转换成queryString，如果传入字符串则会原样发送
+ *     timeout: 30000, // 默认 30秒
+ *     data: { id: 1 },
  *     method: "post", // 默认是get
  *     type: "json", // 默认是json
- *     onSuccess: function(jsonObject) { console.log(jsonObject); },
- *     onError: function(xmlHttp) { }, // 当访问出错，比如网络连接不上、解析内容失败时触发，超时也会触发
- *     onTimeout: function(xmlHttp) { }, // 超时触发
- *     onAbort: function() { } // 网络中断时触发
+ *     success: function(res) { console.log(res); },
+ *     error: function(res) { } // 当访问出错，比如网络连接不上、解析内容失败时触发，超时也会触发
  * });
  *
  */
-var merge = require("../json/merge");
-var jsonToQuery = require("../json/jsonToQuery");
-var appendQuery = require("../str/appendQuery");
 
-module.exports = function(opts) {
-    var xmlHttp = new XMLHttpRequest();
-    var tid = 0;
-    opts = merge({
-        "url": "",
-        "timeout": 30 * 1000,
-        "data": {},
-        "onSuccess": function() {},
-        "onError": function() {},
-        "onTimeout": function() {},
-        "onAbort": function(){},
-        "method": "get",
-        "type": "json" // "text/json/xml"
-    }, opts);
+import query from '../json/query'
+import merge from '../json/merge'
+import {isObject, isFunction, isString, isPromise} from '../util/dataType'
 
-    opts.method = opts.method.toLocaleLowerCase() == "get" ? "get" : "post";
-
-    if (opts["method"] == "get" && opts["data"]) {
-        opts["url"] = appendQuery(opts["url"], opts["data"]);
+let _options = {
+    url: "",
+    timeout: 30 * 1000,
+    data: null,
+    success: function(){},
+    error: function(){},
+    method: "get",
+    type: "json", //"text/json/xml"
+    headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/x-www-form-urlencoded'
     }
+};
 
-    var callback = function() {
-        if (xmlHttp.readyState == 4) {
-            clearTimeout(tid);
-            var data = "";
-            tid = 0;
+let _defaults = {
+    options: _options,
+    response: {
+        suc: null,
+        err: null
+    },
+    request: {
+        suc: null
+    }
+};
 
-            if (opts["type"] == "xml") {
-                data = xmlHttp.responseXML;
-            } else if (opts["type"] == "text") {
-                data = xmlHttp.responseText;
+function response(res, opts, resolve, reject, callback) {
+    return function () {
+        if (res.readyState === 4) {
+            let data = "";
+            (isFunction(callback)) && callback();
+            if (opts.type === "xml") {
+                data = res.responseXML;
+            } else if (opts.text === "text") {
+                data = res.responseText;
             } else {
-                if (xmlHttp.responseText != null && typeof xmlHttp.responseText == "string") {
+                data = res.responseText;
+                if (isString(data)) {
                     try {
-                        data = JSON.parse(xmlHttp.responseText);
+                        data = JSON.parse(data);
                     } catch(ex) {
                         data = {};
-                        console.error(ex);
                     }
                 } else {
                     data = {};
                 }
             }
 
-            if (xmlHttp.status == 200) {
-                try {
-                    opts.onSuccess(data);
-                }catch(ex){console.error(ex);}
-            } else if (xmlHttp.status == 0) {
-                try {
-                    opts.onAbort(xmlHttp); // 中断或断网
-                }catch(ex){console.error(ex);}
-
-                try {
-                    opts.onError(xmlHttp);
-                }catch(ex){console.error(ex);}
+            if (res.status === 200) {
+                res.data = data;
+                let suc = isFunction(_defaults.response.suc) ? _defaults.response.suc(res) : data;
+                if (isPromise(suc)) {
+                    suc.catch(r => {
+                        opts.error(r);
+                        reject(r);
+                    })
+                } else {
+                    opts.success(suc);
+                    resolve(suc);
+                }
             } else {
-                try {
-                    console.error("请求[" + opts["url"] + "]失败，状态码为" + xmlHttp.status);
-                    opts.onError(xmlHttp);
-                }catch(ex){console.error(ex);}
+                let status = res.status;
+                let result = { res: res, status: status, msg: status === 0 ? "已经中断！" : "请求[" + opts.url + "]失败，状态码为" + status };
+                let err = isFunction(_defaults.response.err) ? _defaults.response.err(res) : result;
+                if(isPromise(err)) {
+                    err.catch(r => {
+                        opts.error(r);
+                        reject(r);
+                    });
+                }else{
+                    opts.error(result);
+                    reject(result);
+                }
+                console.error(result.msg);
             }
         }
     }
-
-    xmlHttp.onreadystatechange = callback;
-    // xmlHttp.timeout = opts["timeout"]; //IE不支持！
-    xmlHttp.open(opts.method, opts.url, true);
-
-    try {
-        xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    } catch(ex){}
-
-    xmlHttp.send(opts.method == "get" ? null : (typeof(opts["data"]) == "string" ? opts["data"] : jsonToQuery(opts["data"])));
-
-    tid = setTimeout(function() {
-        tid = 0;
-        xmlHttp.abort();
-
-        try {
-            opts.onError(xmlHttp);
-            opts.onTimeout(xmlHttp);
-        }catch(ex){console.error(ex);}
-    }, opts.timeout);
-
-    return xmlHttp;
 }
+
+function requestTimeout(res, error, reject, timeout) {
+    return setTimeout(function() {
+        res.abort();
+        let result = {res: res, status: res.status, msg: "请求超时！"};
+        console.error(result.msg);
+        error(result);
+        reject(result);
+    }, timeout);
+}
+
+function ajax(opts) {
+    return new Promise((resolve, reject) => {
+        let xmlHttp = new XMLHttpRequest(), tid = null;
+        opts = merge(true, {}, _defaults.options, opts);
+        opts.method = opts.method.toLocaleLowerCase() === "get" ? "get" : "post";
+
+        if(isFunction(_defaults.request.suc)){
+            opts = _defaults.request.suc(opts);
+        }
+
+        if (opts.method === "get" && isObject(opts.data)) {
+            opts.url = query.url(opts.url, opts.data);
+        }
+
+        xmlHttp.onreadystatechange = response(xmlHttp, opts, resolve, reject, () => clearTimeout(tid));
+        xmlHttp.timeout = opts.timeout;
+        xmlHttp.open(opts.method, opts.url, true);
+
+        for(let key in opts.headers){
+            xmlHttp.setRequestHeader(key, opts.headers[key]);
+        }
+
+        xmlHttp.send(opts.method === "get" ? null : (isString(opts.data) ? opts.data : query.stringify(opts.data)));
+
+        tid = requestTimeout(xmlHttp, opts.error, reject, opts.timeout);
+    });
+}
+
+ajax.create = function (opts) {
+    _defaults.options = merge(true, {}, _options, opts);
+    return ajax;
+};
+
+ajax.response = {
+    use(ful, rej) {
+        _defaults.response.suc = ful;
+        _defaults.response.err = rej;
+    }
+};
+
+ajax.request = {
+    use(ful) {
+        _defaults.request.suc = ful;
+    }
+};
+
+ajax.get = function (url, data) {
+    return ajax({url: url, data: data, method: "get"});
+};
+
+ajax.post = function (url, data) {
+    return ajax({url: url, data: data, method: "post"});
+};
+
+export default ajax;

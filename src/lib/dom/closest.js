@@ -1,8 +1,10 @@
-var matches = require("./matches");
-var contains = require("./contains");
-
-module.exports = function(node, selector, box) {
-    var result = null;
+import matches from './matches'
+import contains from './contains'
+/*************
+ * 向上查找某个节点
+ */
+export default function(node, selector, box) {
+    let result = null;
     box = box || document.body;
 
     if (node.closest) {

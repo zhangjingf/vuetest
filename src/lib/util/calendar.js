@@ -1,90 +1,140 @@
 /**
- * 日历辅助组件
- *
+ * 日期操作工具
+ * by 璩
  */
-var getType = require("../util/getType");
+import formatDate from './formatDate'
 
-module.exports = function() {
-    var that = {};
-    var current = new Date();
-
-    that.setDate = function() {
-        if (getType(arguments[0]) == "Date") {
-            current = new Date(arguments[0].getFullYear() , arguments[0].getMonth(), arguments[0].getDate());
-        } else if (getType(arguments[0]) == "string") {
-            current = new Date(arguments[0].replace(/\-/g, "/"));
-        } else if (arguments.length == 3) {
-            current = new Date(arguments[0] + "/" + arguments[1] + "/" + arguments[2]);
-        }
-    }
-
-    that.getDate = function() {
-        return current;
-    }
-
-    that.format = function(formatStr, now) {
-        return module.exports.format(formatStr, now || current);
-    }
-
-    /**
-     * 获取视图数据
-     * @param  {number} startDay 可取值1或者0，表示周日还是周一开始一周，默认是0
-     * @return {object}          视图数据
+export default {
+    getDate () {
+        return new Date();
+    },
+    /**********
+     * 将字符串转成日期
+     * @param date
      */
-    that.getView = function(startDay) {
-        startDay = startDay == 1 ? 1 : 0;
-        var date = new Date(current.getFullYear(), current.getMonth(), 1);
-        var firstDay = date.getDay();
-        var startDate = new Date(date.getFullYear(), date.getMonth(), 1 - firstDay + startDay);
-        date = new Date(current.getFullYear(), current.getMonth() + 1, 0);
-        var lastDay = date.getDay();
-        var endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + (6 - lastDay) + startDay);
-        var dateDiff = parseInt((endDate - startDate) / (1000 * 60 * 60 * 24));
-        dateDiff < 41 && (endDate.setTime(endDate.getTime() + 7 * 1000 * 60 * 60 * 24));
-        date = new Date(startDate);
-        var view = [];
-
-        while(date.getTime() <= endDate.getTime()) {
-            view.push({
-                ins: date,
-                year: date.getFullYear(),
-                month: date.getMonth() + 1,
-                date: date.getDate(),
-                day: date.getDay()
-            });
-
-            date = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+    parse (date) {
+        if(date instanceof Date) return date;
+        return new Date(that.format(date).replace(/\-/g, "/"));
+    },
+    /******************
+     * 将日期转成字符串
+     * @param date
+     * @param format
+     * @returns {*}
+     */
+    format (date, format) {
+        return formatDate(date, format);
+    },
+    /******************
+     * 返回时间戳
+     * @type {that.now}
+     */
+    now (date) {
+        if(!date) return this.getDate().getTime();
+        return this.parse(date).getTime();
+    },
+    /**************
+     *返回当月天数
+     * @param year
+     * @param month
+     * @returns {number}
+     */
+    getMonthDay (year, month) {
+        if(year instanceof Date){
+            month = year.getMonth();
+            year = year.getFullYear();
         }
-
-        return view;
+        const months = [31,28,31,30,31,30,31,31,30,31,30,31];
+        if (((0 === (year % 4)) && ((0 !== (year % 100)) || (0 === (year % 400)))) && month === 1){
+            return 29;
+        } else {
+            return months[month];
+        }
+    },
+    /********************
+     * 返回一个日期向前或向后多少天的新日期
+     * @param date
+     * @param value
+     */
+    getOffsetDate (date, value) {
+        let time = value * 24 * 3600 * 1000;
+        let newTime = this.now(date) + time;
+        return this.parse(newTime);
+    },
+    /*******
+     * 返回当前日期的第一天
+     * @param date
+     */
+    getCurDateFirst (date) {
+        date = that.parse(date);
+        let day = date.getDate();
+        return that.getOffsetDate(date, -day + 1);
+    },
+    /**********
+     * 返回当前日期的上一月的第一天
+     * @param date
+     */
+    getPrevDateFirst (date) {
+        let prevDate = this.getPrevDateLast(date);
+        let day = this.getMonthDay(prevDate);
+        return this.getOffsetDate(prevDate, -day + 1);
+    },
+    /**********
+     * 返回当前日期的上一月的最后一天
+     * @param date
+     */
+    getPrevDateLast (date) {
+        date = this.parse(date);
+        let day = date.getDate();
+        return this.getOffsetDate(date, -day);
+    },
+    /**********
+     * 返回当前日期的下一月的第一天
+     * @param date
+     */
+    getNextDateFirst (date) {
+        date = this.parse(date);
+        let day = this.getMonthDay(date) - date.getDate();
+        return this.getOffsetDate(date, day + 1);
+    },
+    /**********
+     * 返回当前日期的下一月的最后一天
+     * @param date
+     */
+    getNextDateLast (date) {
+        let nextDate = this.getNextDateFirst(date);
+        let day = this.getMonthDay(nextDate);
+        return this.getOffsetDate(nextDate, day - 1);
+    },
+    /*****************
+     * 比较两个日期相差多少天
+     * @param date1
+     * @param date2
+     * @returns {number}
+     */
+    getCompareDateDay (date1, date2) {
+        var time1 =this.now(date1);
+        var time2 = this.now(date2);
+        return (time2 - time1) / (1000 * 3600 * 24);
+    },
+    /****************
+     * 比较两个时间相差多少天
+     * @param time1
+     * @param time2
+     * @returns {number}
+     */
+    getCompareTimeDay (time1, time2) {
+        let date = this.format(this.getDate(), "yyyy-MM-dd");
+        return this.getCompareDateDay(date + " " + time1, date + " " + time2);
+    },
+    /***********
+     * 返回一个日期向前或向后多少天的新日期字符串
+     * @param date
+     * @param value
+     * @param format
+     * @returns {*}
+     */
+    getOffsetDateStr (date, value, format) {
+        return this.format(this.getOffsetDate(date, value), format || "yyyy-MM-dd");
     }
-
-    return that;
-}
-
-module.exports.format = function(formatStr, now) {
-    now = now || new Date();
-    var year = now.getFullYear();
-    var month = now.getMonth() + 1;
-    var date = now.getDate();
-    var hours = now.getHours();
-    var minutes = now.getMinutes();
-    var sec = now.getSeconds();
-
-    var fixNum = function(num) {
-        return num < 10 ? "0" + num : num;
-    }
-
-    return formatStr.replace(/\%yyyy/g, now.getFullYear())
-        .replace(/\%yy/g, now.getFullYear().toString().substr(2))
-        .replace(/\%MM/g, fixNum(month))
-        .replace(/\%M/g, month)
-        .replace(/\%dd/g, fixNum(date))
-        .replace(/\%d/g, date)
-        .replace(/\%hh/g, fixNum(hours))
-        .replace(/\%h/g, hours)
-        .replace(/\%mm/g, fixNum(minutes))
-        .replace(/\%m/g, minutes)
-        .replace(/\%ss/g, fixNum(sec))
-        .replace(/\%s/g, sec);
-}
+};

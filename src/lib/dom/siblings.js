@@ -3,11 +3,11 @@
  *  siblings(el, '.foo') // gets all siblings of `el` that have class 'foo'
  */
 
-var matches = require('./matches');
+import matches from './matches';
 
-module.exports = function(el, selector) {
-    var node = el.parentNode.firstChild;
-    var siblings = [];
+export default function(el, selector) {
+    let node = el.parentNode.firstChild;
+    let siblings = [];
 
     for (; node; node = node.nextSibling) {
         if (node.nodeType === 1 && node !== el) {
