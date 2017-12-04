@@ -13,10 +13,11 @@ const store = new Vuex.Store({
         }
     },
     actions: {
-        incrementAsync({ commit }) {
+        incrementAsync({ commit }, data) {
             console.log('异步触发');
+            console.log(data);
             setTimeout(() => {
-                //commit('increment')
+                commit('increment', data)
                 console.log("zaucduycd");
             }, 1000)
         }

@@ -1,6 +1,6 @@
 <template>
   <div class="m-mall">
-    <div class="star">{{"★★★★★☆☆☆☆☆".slice(5 - rate, 10 - rate)}}</div>
+    <div class="star" @click="star">{{"★★★★★☆☆☆☆☆".slice(5 - rate, 10 - rate)}}</div>
     <div class="btn" @click="star">评分</div>
   </div>
 </template>
@@ -20,13 +20,10 @@ export default {
       } else {
         this.rate = 0;
       }
-      
     }
   }
  }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .m-mall {
   display: flex;
@@ -34,6 +31,7 @@ export default {
   .star {
     font-size: 20px;
     color: #ff9600;
+    letter-spacing: 10px;
   }
   .btn {
     font-size: 16px;

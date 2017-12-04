@@ -5,10 +5,10 @@
       <router-view></router-view>
     </div>
     <footer>
-      <div><router-link :to="{ path: 'film' }" replace>电影</router-link></div>
-      <div><router-link to="/find" replace>发现</router-link></div>
-      <div><router-link to="/mall" replace>商城</router-link></div>
-      <div><router-link to="/menu" replace>我的</router-link></div>
+      <div><router-link :to="{ path: 'film' }" replace>page1</router-link></div>
+      <div><router-link to="/find" replace>page2</router-link></div>
+      <div><router-link to="/mall" replace>page3</router-link></div>
+      <div><router-link to="/menu" replace>page4</router-link></div>
     </footer>
   </div>
 </template>
