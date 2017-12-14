@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {mapState, mapGetters} from 'vuex'
-Vue.use(Vuex);
+if (process.env.NODE_ENV === 'development') {
+    Vue.use(Vuex)
+}
 const store = new Vuex.Store({
     state: {
         count: 0

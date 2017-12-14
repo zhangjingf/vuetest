@@ -6,8 +6,10 @@ import find from '@/views/find'
 import mall from '@/views/mall'
 import menu from '@/views/menu'
 import filmDetail from '@/views/filmDetail'
-Vue.use(Router)
-Vue.use(Source)
+if (process.env.NODE_ENV === 'development') {
+    Vue.use(Router)
+    Vue.use(Source)
+}
 
 const routes = [
     { path: '/film', component: film, name: '电影', children: [

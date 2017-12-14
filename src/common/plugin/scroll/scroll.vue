@@ -63,7 +63,7 @@ export default {
         },
         hanlder(ev) {
             let posData = this.pos();
-            console.log(posData);
+            //console.log(posData);
         }
     }
 }
