@@ -2,7 +2,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
+import appEchart from './components/chart'
 
+Vue.use(appEchart);
 //import Axios from "./components/util/diyaxios"
 Vue.config.productionTip = false;
 //Vue.prototype.$http = Axios;

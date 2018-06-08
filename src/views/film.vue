@@ -13,7 +13,7 @@
         <div v-for="item in movie">
           <div class="img"><img :src="item.imgUrl" alt=""></div>
           <div class="filmInfo">
-            <div class="title">{{item.title}}
+            <div class="title">{{item.title}} 
               <span>{{item.type}}</span>
             </div>
             <div class="tip">{{item.tip}}</div>
@@ -21,14 +21,13 @@
           </div>
           <div class="wantsee">
             <div>{{item.wantsee}}想看</div>
-            <div>预售</div>
+            <div><router-link to="/film/detail" replace>预售</router-link></div>
           </div>
         </div>
       </div>
-      <scroll :node="node" :loading="loading" @pullDownLoad="pullDownLoad" @pullUpLoad="pullUpLoad"/>
-    </div>
     </div>
   </transition>
+  
 </template>
 
 <script type="text/ecmascript-6">

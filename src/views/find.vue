@@ -1,8 +1,12 @@
 <template>
-  <div class="m-find">{{count}}</div>
+  <div class="m-find">
+    {{count}}
+    <app-time></app-time>
+  </div>
 </template>
 
 <script>
+import appTime from '@/components/time'
 export default { 
   props: ["options"],
   data() {
@@ -14,6 +18,9 @@ export default {
       console.log(this);
       return this.$store.state.count;
     }
+  },
+  components: {
+    appTime
   }
 }
 </script>
