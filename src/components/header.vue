@@ -43,7 +43,6 @@ export default {
 <style scoped>
 .header {
   display: flex;
-  width: 100%;
   align-items: center;
   padding: 0 1rem;
   font-size: 1.2rem;
