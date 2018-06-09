@@ -1,7 +1,8 @@
 <template>
   <div class="m-find">
     {{count}}
-    <app-time :props="timeParam"  @handleSelected="handleSelected"></app-time>
+    <div @click="dateShow">日期选择</div>
+    <app-time :options="timeParam" :show="this.show"  @handleSelected="handleSelected"></app-time>
   </div>
 </template>
 
@@ -15,7 +16,8 @@ export default {
         cancel: '取消',
         confrim: '确认',
         title: '请选择',
-      }
+      },
+      show: false,
     }
   },
   computed: {
@@ -31,6 +33,9 @@ export default {
   methods: {
     handleSelected(val) {
       console.log(val);
+    },
+    dateShow() {
+      this.show = true;
     }
   }
 }

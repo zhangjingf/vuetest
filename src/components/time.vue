@@ -47,7 +47,18 @@
 <script>
 import Swiper from '../../static/js/swiper.min.js';
 export default {
-    props: ['props'],
+    props: {
+        options: {
+            type: Object,
+            default() {
+                return {}
+            }
+        },
+        show: {
+            type: Boolean,
+            default: true
+        }
+    },
     data() {
         return {
             data: [[],{}],
@@ -55,9 +66,9 @@ export default {
             hourList: null,
             minuteList: null,
             dateArr: [],
-            cancel: this.props.cancel ? this.props.cancel : 'cancel',
-            title:  this.props.title ? this.props.title : 'title',
-            confrim: this.props.confrim ? this.props.confrim : 'confrim',
+            cancel: this.options.cancel ? this.options.cancel : 'cancel',
+            title:  this.options.title ? this.options.title : 'title',
+            confrim: this.options.confrim ? this.options.confrim : 'confrim',
             showFlag: true,
         }
     },
@@ -83,6 +94,13 @@ export default {
         }
         vm.dayList = vm.data[0];
         vm.$nextTick(()=> {
+            vm.init(); 
+        })
+    },
+    methods: {
+        init() {
+            console.log(11111)
+            const vm = this;
             let daySwiper = new Swiper('.day_wrapper', {
                 direction : 'vertical',
                 slidesPerView: 3,
@@ -123,10 +141,7 @@ export default {
                     
                 }
             })
-            
-        })
-    },
-    methods: {
+        },
         minuteSwiper() {
             const vm = this;
             return new Swiper('.minute_wrapper', {
@@ -177,8 +192,9 @@ export default {
     created() {
     },
     watch: {
-        showFlag() {
-
+        show(val) {
+            console.log(val)
+            this.init();
         }
     }
 }
