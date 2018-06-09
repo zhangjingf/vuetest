@@ -1,40 +1,43 @@
 <template>
-    <div class="date_picker">
+    <div class="date_picker" v-if="showFlag">
         <div class="mask"></div>
         <div class="date">
-            <div ref="day" class="swiper-container day_wrapper">
-                <div class="swiper-wrapper day_content">
-                    <template v-for="(item, index) in this.dayList">
-                        <div class="swiper-slide" :key="index">{{item.value}}</div>
-                    </template>
+            <div class="title"><div @click="handleCancel">{{cancel}}</div><div>{{title}}</div><div @click="handleConfrim">{{confrim}}</div></div>
+            <div class="content">
+                <div ref="day" class="swiper-container day_wrapper">
+                    <div class="swiper-wrapper day_content">
+                        <template v-for="(item, index) in this.dayList">
+                            <div class="swiper-slide" :key="index">{{item.value}}</div>
+                        </template>
+                    </div>
                 </div>
-            </div>
-            <div ref="hour" class="swiper-container hour_wrapper">
-                <div class="swiper-wrapper hour_content">
-                    <template v-for="(item, index) in this.hourList">
-                        <div class="swiper-slide" :key="index">
-                            <template v-if="item.value.toString().length == 1">
-                                0{{item.value}}
-                            </template>
-                            <template v-else>
-                                {{item.value}}
-                            </template>
-                        </div>
-                    </template>
+                <div ref="hour" class="swiper-container hour_wrapper">
+                    <div class="swiper-wrapper hour_content">
+                        <template v-for="(item, index) in this.hourList">
+                            <div class="swiper-slide" :key="index">
+                                <template v-if="item.value.toString().length == 1">
+                                    0{{item.value}}
+                                </template>
+                                <template v-else>
+                                    {{item.value}}
+                                </template>
+                            </div>
+                        </template>
+                    </div>
                 </div>
-            </div>
-            <div ref="minute" class="minute_wrapper">
-                <div class="swiper-wrapper minute_content">
-                    <template v-for="(item, index) in this.minuteList">
-                        <div class="swiper-slide" :key="index">
-                            <template v-if="item.value.toString().length == 1">
-                                0{{item.value}}
-                            </template>
-                            <template v-else>
-                                {{item.value}}
-                            </template>
-                        </div>
-                    </template>
+                <div ref="minute" class="swiper-container minute_wrapper">
+                    <div class="swiper-wrapper minute_content">
+                        <template v-for="(item, index) in this.minuteList">
+                            <div class="swiper-slide" :key="index">
+                                <template v-if="item.toString().length == 1">
+                                    0{{item}}
+                                </template>
+                                <template v-else>
+                                    {{item}}
+                                </template>
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,10 +54,12 @@ export default {
             dayList: null,
             hourList: null,
             minuteList: null,
+            dateArr: [],
+            cancel: this.props.cancel ? this.props.cancel : 'cancel',
+            title:  this.props.title ? this.props.title : 'title',
+            confrim: this.props.confrim ? this.props.confrim : 'confrim',
+            showFlag: true,
         }
-    },
-    components: {
-       
     },
     mounted () {
         const vm = this;
@@ -87,14 +92,22 @@ export default {
                 observer:true,
                 observeParents:true,
                 onInit: function(ev) {
-                    vm.hourList = vm.data[1][vm.data[0][ev.activeIndex].value];
-                    //vm.minuteList = vm.data[2][vm.data[0][ev.activeIndex].value][vm.hourList[ev.activeIndex].value];
+                    vm.hourList = vm.data[1][vm.data[0][0].value];
+                    vm.dateArr[0] = ev.slides[0].innerText;
+                    vm.minuteList = vm.minuteData(vm.hourList[0].value);
+                    vm.dateArr[1] = vm.hourList[0].value;
+                    minuteSwiper = vm.minuteSwiper();
                 },
                 onSlideChangeEnd: function(ev) {
-                    console.log(ev.activeIndex)
                     vm.hourList = vm.data[1][vm.data[0][ev.activeIndex].value];
+                    vm.dateArr[0] = ev.slides[ev.activeIndex].innerText;
+                    vm.minuteList = vm.minuteData(vm.hourList[0].value);
+                    vm.dateArr[1] = vm.hourList[0].value;
+                    minuteSwiper = vm.minuteSwiper();
+                    hourSwiper.slideTo(0);
                 }
             });
+            let minuteSwiper = null;
             let hourSwiper = new Swiper('.hour_wrapper', {
                 direction: 'vertical',
                 slidesPerView: 3,
@@ -104,49 +117,69 @@ export default {
                 observer: true,
                 observeParents: false,
                 onSlideChangeEnd: function(ev) {
-                   vm.minuteData(ev.slides[ev.activeIndex].innerText);
-                }
-            })
-            let minuteSwiper = new Swiper('.minute_wrapper', {
-                direction: 'vertical',
-                slidesPerView: 3,
-                slideToClickedSlide: true,
-                centeredSlides: true,
-                slideActiveClass: "active",
-                freeMode: true,
-                observer:true,
-                observeParents: false,
-                onSlideChangeEnd: function(ev) {
-                   console.log(ev);
+                    vm.minuteList = vm.minuteData(ev.slides[ev.activeIndex].innerText);
+                    vm.dateArr[1] = ev.slides[ev.activeIndex].innerText;
+                    minuteSwiper = vm.minuteSwiper();
+                    
                 }
             })
             
         })
     },
     methods: {
-        hourData() {
-
+        minuteSwiper() {
+            const vm = this;
+            return new Swiper('.minute_wrapper', {
+                direction: 'vertical',
+                slidesPerView: 3,
+                slideToClickedSlide: true,
+                centeredSlides: true,
+                slideActiveClass: "active",
+                observer:true,
+                observeParents: false,
+                onInit: function(ev) {
+                    vm.dateArr[2] = vm.minuteList[0];
+                },
+                onSlideChangeEnd: function(ev) {
+                    vm.dateArr[2] = ev.slides[ev.activeIndex].innerText;
+                }
+            })
         },
         minuteData(val) {
-            console.log(~~val)
+            var vm = this;
             var now = new Date();
+            var day = now.getDate();
             var hour = now.getHours();
             var minute = Math.floor(now.getMinutes());
-            if(val) {
-                
+            if(day == vm.dateArr[0] && hour == ~~val) {
+                var diffMinute = (60 - minute)/5;
+                var baseMinute = diffMinute == 12 ? 0 : (minute % 5 ? minute + (5 - minute % 5) : minute);
+                var arr = [];
+                for(var z = 0; z < diffMinute; z++) {
+                    if(baseMinute != 60) {
+                        arr.push(baseMinute);
+                    }
+                    baseMinute = baseMinute + 5;
+                }
+                return arr;
+            } else {
+                return [0,5,10,15,20,25,30,35,40,45,50,55];
             }
-            // var diffMinute = (i && y) ? 12 : (60 - minute)/5;
-            // var baseMinute = diffMinute == 12 ? 0 : (minute % 5 ? minute + (5 - minute % 5) : minute);
-            // for(var z = 0; z < diffMinute; z++) {
-            //     if(baseMinute != 60) {
-                    
-            //     }
-            //     baseMinute = baseMinute + 5;
-            // }
+        },
+        handleCancel() {
+            this.showFlag = false;
+        },
+        handleConfrim() {
+            this.showFlag = false;
+            this.$emit("handleSelected", this.dateArr);
         }
-
     },
     created() {
+    },
+    watch: {
+        showFlag() {
+
+        }
     }
 }
 </script>
@@ -182,8 +215,19 @@ export default {
         //height: 6rem;
         padding: 1.5rem 0;
         text-align: center;
-        @include display-flex();
-        @include justify-content(space-around);
+        .title {
+            @include display-flex();
+            font-size: 1.2rem;
+            padding: 0 .5rem;
+            padding-bottom: 1rem;
+            &>div:nth-child(2) {
+                @include flex(1);
+            }
+        }
+        .content{
+            @include display-flex();
+            @include justify-content(space-around);
+        }
         .day_wrapper, .hour_wrapper, .minute_wrapper {
             height: 10rem;
             @include flex(1);

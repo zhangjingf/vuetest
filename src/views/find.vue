@@ -1,7 +1,7 @@
 <template>
   <div class="m-find">
     {{count}}
-    <app-time></app-time>
+    <app-time :props="timeParam"  @handleSelected="handleSelected"></app-time>
   </div>
 </template>
 
@@ -10,7 +10,13 @@ import appTime from '@/components/time'
 export default { 
   props: ["options"],
   data() {
-    return {}
+    return {
+      timeParam :{
+        cancel: '取消',
+        confrim: '确认',
+        title: '请选择',
+      }
+    }
   },
   computed: {
     count() {
@@ -21,6 +27,11 @@ export default {
   },
   components: {
     appTime
+  },
+  methods: {
+    handleSelected(val) {
+      console.log(val);
+    }
   }
 }
 </script>
