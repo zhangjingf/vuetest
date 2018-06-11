@@ -1,5 +1,5 @@
 <template>
-    <div class="date_picker" v-if="showFlag">
+    <div class="date_picker" v-show="showFlag">
         <div class="mask"></div>
         <div class="date">
             <div class="title"><div @click="handleCancel">{{cancel}}</div><div>{{title}}</div><div @click="handleConfrim">{{confrim}}</div></div>
@@ -56,7 +56,7 @@ export default {
         },
         show: {
             type: Boolean,
-            default: true
+            default: false
         }
     },
     data() {
@@ -69,38 +69,12 @@ export default {
             cancel: this.options.cancel ? this.options.cancel : 'cancel',
             title:  this.options.title ? this.options.title : 'title',
             confrim: this.options.confrim ? this.options.confrim : 'confrim',
-            showFlag: true,
+            showFlag: false,
         }
     },
     mounted () {
         const vm = this;
-        const DAY_COUNT = 3;
-        const now = new Date();
-        var day = now.getDate();
-        var hour = now.getHours();
-        var minute = Math.floor(now.getMinutes());
-        for(var i = 0; i < DAY_COUNT; i++) {
-            vm.data[0][i] = {
-                value: day
-            }
-            var diffHour = !!i ? 24 : 24-hour;
-            var hour = diffHour == 24 ? 0 : hour;
-            vm.data[1][day] = new Array();
-            for(var y = 0; y < diffHour; y++) {
-                vm.data[1][day].push({value: hour}) 
-                hour++;
-            }
-            day++;
-        }
-        vm.dayList = vm.data[0];
         vm.$nextTick(()=> {
-            vm.init(); 
-        })
-    },
-    methods: {
-        init() {
-            console.log(11111)
-            const vm = this;
             let daySwiper = new Swiper('.day_wrapper', {
                 direction : 'vertical',
                 slidesPerView: 3,
@@ -138,9 +112,33 @@ export default {
                     vm.minuteList = vm.minuteData(ev.slides[ev.activeIndex].innerText);
                     vm.dateArr[1] = ev.slides[ev.activeIndex].innerText;
                     minuteSwiper = vm.minuteSwiper();
-                    
                 }
-            })
+            }) 
+        })
+    },
+    methods: {
+        initData() {
+            const vm = this;
+            const DAY_COUNT = 3;
+            const now = new Date();
+            var day = now.getDate();
+            var hour = now.getHours();
+            var minute = Math.floor(now.getMinutes());
+            for(var i = 0; i < DAY_COUNT; i++) {
+                vm.data[0][i] = {
+                    value: day
+                }
+                var diffHour = !!i ? 24 : 24-hour;
+                var hour = diffHour == 24 ? 0 : hour;
+                vm.data[1][day] = new Array();
+                for(var y = 0; y < diffHour; y++) {
+                    vm.data[1][day].push({value: hour}) 
+                    hour++;
+                }
+                day++;
+            }
+            vm.dayList = vm.data[0];
+            vm.showFlag = vm.show;
         },
         minuteSwiper() {
             const vm = this;
@@ -183,18 +181,21 @@ export default {
         },
         handleCancel() {
             this.showFlag = false;
+            this.$emit("close");
         },
         handleConfrim() {
             this.showFlag = false;
+            this.$emit("close");
             this.$emit("handleSelected", this.dateArr);
         }
     },
     created() {
+        this.initData();
     },
     watch: {
         show(val) {
-            console.log(val)
-            this.init();
+            if(!val) return; 
+            this.initData();
         }
     }
 }

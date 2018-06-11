@@ -2,7 +2,7 @@
   <div class="m-find">
     {{count}}
     <div @click="dateShow">日期选择</div>
-    <app-time :options="timeParam" :show="this.show"  @handleSelected="handleSelected"></app-time>
+    <app-time :options="timeParam" :show="this.show" @close="close"  @handleSelected="handleSelected"></app-time>
   </div>
 </template>
 
@@ -36,6 +36,9 @@ export default {
     },
     dateShow() {
       this.show = true;
+    },
+    close() {
+      this.show = false;
     }
   }
 }
