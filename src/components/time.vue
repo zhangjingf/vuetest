@@ -107,7 +107,7 @@ export default {
                 centeredSlides: true,
                 slideActiveClass: "active",
                 observer: true,
-                observeParents: false,
+                observeParents: true,
                 onSlideChangeEnd: function(ev) {
                     vm.minuteList = vm.minuteData(ev.slides[ev.activeIndex].innerText);
                     vm.dateArr[1] = ev.slides[ev.activeIndex].innerText;
@@ -149,7 +149,7 @@ export default {
                 centeredSlides: true,
                 slideActiveClass: "active",
                 observer:true,
-                observeParents: false,
+                observeParents: true,
                 onInit: function(ev) {
                     vm.dateArr[2] = vm.minuteList[0];
                 },
