@@ -1,10 +1,6 @@
 <template>
   <div class="m-find">
     {{count}}
-    <div @click="dateShow">日期选择</div>
-    <div @click="dateVisible">日期选择</div>
-    <app-time :options="timeParam" :show="this.show" @close="close"  @handleSelected="handleSelected"></app-time>
-    <app-date></app-date>
   </div>
 </template>
 

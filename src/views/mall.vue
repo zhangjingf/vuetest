@@ -2,16 +2,21 @@
   <div class="m-mall">
     <div class="star" @click="star">{{"★★★★★☆☆☆☆☆".slice(5 - rate, 10 - rate)}}</div>
     <div class="btn" @click="star">评分</div>
+    <div class="bnt" @click="indicator">提示</div>
   </div>
 </template>
 
 <script>
+import { Toast, Indicator } from 'mint-ui';
 export default {
   props: ["options"],
   data() {
     return {
       rate: 0
     }
+  },
+  mounted () {
+    Toast('提示信息');
   },
   methods: {
     star() {
@@ -20,6 +25,15 @@ export default {
       } else {
         this.rate = 0;
       }
+    },
+    indicator () {
+      Indicator.open({
+        text: '加载中...',
+        spinnerType: 'fading-circle'
+      })
+      setTimeout(() => {
+        Indicator.close()
+      }, 5000);
     }
   }
  }
